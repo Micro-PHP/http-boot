@@ -26,6 +26,8 @@ class ApplicationStartedListenerTest extends TestCase
 
     private HttpFacadeInterface $httpFacade;
 
+    private ApplicationReadyEvent $applicationReadyEvent;
+
     protected function setUp(): void
     {
         $this->httpFacade = $this->createMock(HttpFacadeInterface::class);
@@ -37,6 +39,11 @@ class ApplicationStartedListenerTest extends TestCase
                 'isHttp',
             ])
             ->getMock();
+
+        $this->applicationReadyEvent = new ApplicationReadyEvent(
+            $this->createMock(AppKernelInterface::class),
+            'any',
+        );
     }
 
     /**
@@ -44,8 +51,6 @@ class ApplicationStartedListenerTest extends TestCase
      */
     public function testOn(bool $isHttp): void
     {
-        $appStartEvent = $this->createMock(ApplicationReadyEvent::class);
-
         $this->applicationStartedListener
             ->expects($this->once())
             ->method('isHttp')
@@ -64,19 +69,18 @@ class ApplicationStartedListenerTest extends TestCase
                 );
         }
 
-        $this->applicationStartedListener->on($appStartEvent);
+        $this->applicationStartedListener->on($this->applicationReadyEvent);
     }
 
     public function testIsHttp()
     {
         $this->httpFacade->expects($this->never())->method('execute');
 
-        $appStartEvent = $this->createMock(ApplicationReadyEvent::class);
         $appListener = new ApplicationStartedListener(
             $this->httpFacade
         );
 
-        $appListener->on($appStartEvent);
+        $appListener->on($this->applicationReadyEvent);
     }
 
     public function dataProvider(): array
@@ -92,9 +96,6 @@ class ApplicationStartedListenerTest extends TestCase
         $httpFacade = $this->createMock(HttpFacadeInterface::class);
         $listener = new ApplicationStartedListener($httpFacade);
 
-        $this->assertTrue($listener->supports(new ApplicationReadyEvent(
-            $this->createMock(AppKernelInterface::class),
-            'any'
-        )));
+        $this->assertTrue($listener->supports($this->applicationReadyEvent));
     }
 }
