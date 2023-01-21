@@ -38,7 +38,7 @@ class ApplicationStartedListener implements EventListenerInterface
     public function on(EventInterface $event): void
     {
         $sysenv = $event->systemEnvironment();
-        if ($sysenv === 'cli') {
+        if ('cli' === $sysenv) {
             return;
         }
 
