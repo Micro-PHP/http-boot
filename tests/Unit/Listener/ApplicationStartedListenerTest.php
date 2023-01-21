@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Micro\Plugin\Http\Test\Unit\Listener;
 
-use Micro\Kernel\App\AppKernelInterface;
-use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;
+use Micro\Kernel\App\Business\Event\ApplicationReadyEventInterface;
 use Micro\Plugin\Http\Facade\HttpFacadeInterface;
 use Micro\Plugin\Http\Listener\ApplicationStartedListener;
 use PHPUnit\Framework\TestCase;
@@ -26,24 +25,18 @@ class ApplicationStartedListenerTest extends TestCase
 
     private HttpFacadeInterface $httpFacade;
 
-    private ApplicationReadyEvent $applicationReadyEvent;
-
     protected function setUp(): void
     {
         $this->httpFacade = $this->createMock(HttpFacadeInterface::class);
-        $this->applicationStartedListener = $this->getMockBuilder(ApplicationStartedListener::class)
-            ->setConstructorArgs([
-                $this->httpFacade,
-            ])
-            ->onlyMethods([
-                'isHttp',
-            ])
-            ->getMock();
+        $this->applicationStartedListener = new ApplicationStartedListener($this->httpFacade);
+    }
 
-        $this->applicationReadyEvent = new ApplicationReadyEvent(
-            $this->createMock(AppKernelInterface::class),
-            'any',
-        );
+    protected function createEvent(bool $isHttp)
+    {
+        $evt = $this->createMock(ApplicationReadyEventInterface::class);
+        $evt->method('systemEnvironment')->willReturn($isHttp ? 'http' : 'cli');
+
+        return $evt;
     }
 
     /**
@@ -51,10 +44,7 @@ class ApplicationStartedListenerTest extends TestCase
      */
     public function testOn(bool $isHttp): void
     {
-        $this->applicationStartedListener
-            ->expects($this->once())
-            ->method('isHttp')
-            ->willReturn($isHttp);
+        $event = $this->createEvent($isHttp);
 
         if (!$isHttp) {
             $this->httpFacade
@@ -69,18 +59,7 @@ class ApplicationStartedListenerTest extends TestCase
                 );
         }
 
-        $this->applicationStartedListener->on($this->applicationReadyEvent);
-    }
-
-    public function testIsHttp()
-    {
-        $this->httpFacade->expects($this->never())->method('execute');
-
-        $appListener = new ApplicationStartedListener(
-            $this->httpFacade
-        );
-
-        $appListener->on($this->applicationReadyEvent);
+        $this->applicationStartedListener->on($event);
     }
 
     public function dataProvider(): array
@@ -96,6 +75,6 @@ class ApplicationStartedListenerTest extends TestCase
         $httpFacade = $this->createMock(HttpFacadeInterface::class);
         $listener = new ApplicationStartedListener($httpFacade);
 
-        $this->assertTrue($listener->supports($this->applicationReadyEvent));
+        $this->assertTrue($listener->supports($this->createEvent(true)));
     }
 }

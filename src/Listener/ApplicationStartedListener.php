@@ -16,6 +16,7 @@ namespace Micro\Plugin\Http\Listener;
 use Micro\Component\EventEmitter\EventInterface;
 use Micro\Component\EventEmitter\EventListenerInterface;
 use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;
+use Micro\Kernel\App\Business\Event\ApplicationReadyEventInterface;
 use Micro\Plugin\Http\Facade\HttpFacadeInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,9 +30,15 @@ class ApplicationStartedListener implements EventListenerInterface
     ) {
     }
 
+    /**
+     * @param ApplicationReadyEvent $event
+     *
+     * @psalm-suppress MoreSpecificImplementedParamType
+     */
     public function on(EventInterface $event): void
     {
-        if (!$this->isHttp()) {
+        $sysenv = $event->systemEnvironment();
+        if ('cli' === $sysenv) {
             return;
         }
 
@@ -40,13 +47,8 @@ class ApplicationStartedListener implements EventListenerInterface
         $this->httpFacade->execute($request);
     }
 
-    protected function isHttp(): bool
-    {
-        return \PHP_SAPI !== 'cli';
-    }
-
     public static function supports(EventInterface $event): bool
     {
-        return $event instanceof ApplicationReadyEvent;
+        return $event instanceof ApplicationReadyEventInterface;
     }
 }
