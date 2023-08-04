@@ -11,11 +11,11 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Plugin\Http\Test\Unit\Listener;
+namespace Micro\Plugin\HttpBoot\Tests\Unit\Listener;
 
-use Micro\Kernel\App\Business\Event\ApplicationReadyEventInterface;
-use Micro\Plugin\Http\Facade\HttpFacadeInterface;
-use Micro\Plugin\Http\Listener\ApplicationStartedListener;
+use Micro\Framework\KernelApp\Business\Event\ApplicationReadyEventInterface;
+use Micro\Plugin\HttpCore\Facade\HttpFacadeInterface;
+use Micro\Plugin\HttpBoot\Listener\ApplicationStartedListener;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 

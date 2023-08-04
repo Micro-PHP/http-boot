@@ -11,9 +11,9 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Plugin\Http;
+namespace Micro\Plugin\HttpBoot;
 
-use Micro\Framework\Kernel\Plugin\PluginDependedInterface;
+use Micro\Framework\BootPluginDependent\Plugin\PluginDependedInterface;
 use Micro\Plugin\EventEmitter\EventEmitterPlugin;
 
 /**

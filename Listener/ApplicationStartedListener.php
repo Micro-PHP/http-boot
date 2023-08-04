@@ -11,13 +11,13 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Plugin\Http\Listener;
+namespace Micro\Plugin\HttpBoot\Listener;
 
-use Micro\Component\EventEmitter\EventInterface;
-use Micro\Component\EventEmitter\EventListenerInterface;
-use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;
-use Micro\Kernel\App\Business\Event\ApplicationReadyEventInterface;
-use Micro\Plugin\Http\Facade\HttpFacadeInterface;
+use Micro\Framework\EventEmitter\EventInterface;
+use Micro\Framework\EventEmitter\EventListenerInterface;
+use Micro\Framework\KernelApp\Business\Event\ApplicationReadyEvent;
+use Micro\Framework\KernelApp\Business\Event\ApplicationReadyEventInterface;
+use Micro\Plugin\HttpCore\Facade\HttpFacadeInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

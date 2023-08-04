@@ -11,11 +11,11 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Plugin\Http\Test\Unit;
+namespace Micro\Plugin\HttpBoot\Tests\Unit;
 
 use Micro\Plugin\EventEmitter\EventEmitterPlugin;
-use Micro\Plugin\Http\HttpBootPlugin;
-use Micro\Plugin\Http\HttpCorePlugin;
+use Micro\Plugin\HttpBoot\HttpBootPlugin;
+use Micro\Plugin\HttpCore\HttpCorePlugin;
 use PHPUnit\Framework\TestCase;
 
 class HttpBootPluginTest extends TestCase
