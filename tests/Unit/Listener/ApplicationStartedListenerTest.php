@@ -31,10 +31,10 @@ class ApplicationStartedListenerTest extends TestCase
         $this->applicationStartedListener = new ApplicationStartedListener($this->httpFacade);
     }
 
-    protected function createEvent(bool $isHttp)
+    protected function createEvent(string $env)
     {
         $evt = $this->createMock(ApplicationReadyEventInterface::class);
-        $evt->method('systemEnvironment')->willReturn($isHttp ? 'http' : 'cli');
+        $evt->method('systemEnvironment')->willReturn($env);
 
         return $evt;
     }
@@ -42,9 +42,9 @@ class ApplicationStartedListenerTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testOn(bool $isHttp): void
+    public function testOn(string $extension, bool $isHttp): void
     {
-        $event = $this->createEvent($isHttp);
+        $event = $this->createEvent($extension);
 
         if (!$isHttp) {
             $this->httpFacade
@@ -64,10 +64,14 @@ class ApplicationStartedListenerTest extends TestCase
 
     public function dataProvider(): array
     {
-        return [
-            [true],
-            [false],
-        ];
+        $allowed = ApplicationStartedListener::ALLOWED_MODES;
+        $data = [];
+
+        foreach ($allowed as $val) {
+            $data[] = [$val, true];
+        }
+
+        return $data;
     }
 
     public function testSupports()
@@ -75,6 +79,6 @@ class ApplicationStartedListenerTest extends TestCase
         $httpFacade = $this->createMock(HttpFacadeInterface::class);
         $listener = new ApplicationStartedListener($httpFacade);
 
-        $this->assertTrue($listener->supports($this->createEvent(true)));
+        $this->assertTrue($listener->supports($this->createEvent(ApplicationStartedListener::ALLOWED_MODES[0])));
     }
 }

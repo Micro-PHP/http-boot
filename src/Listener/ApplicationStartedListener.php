@@ -25,6 +25,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ApplicationStartedListener implements EventListenerInterface
 {
+    public const ALLOWED_MODES = [
+        'apache2handler',
+        'apache',
+        'cgi-fcgi',
+        'fpm-fcgi',
+        'litespeed',
+        'cli-server',
+    ];
+
     public function __construct(
         private readonly HttpFacadeInterface $httpFacade
     ) {
@@ -38,12 +47,11 @@ class ApplicationStartedListener implements EventListenerInterface
     public function on(EventInterface $event): void
     {
         $sysenv = $event->systemEnvironment();
-        if ('cli' === $sysenv) {
+        if (!\in_array($sysenv, self::ALLOWED_MODES)) {
             return;
         }
 
         $request = Request::createFromGlobals();
-
         $this->httpFacade->execute($request);
     }
 
