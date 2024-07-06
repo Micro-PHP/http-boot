@@ -15,19 +15,13 @@
         "micro/plugin-event-emitter": "^2.0",
         "micro/plugin-http-core": "^2.0"
     },
-    "require-dev": {
-        "ergebnis/composer-normalize": "^2.34"
-    },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Micro\\Plugin\\HttpBoot\\": "/"
         }
     },
     "config": {
-        "allow-plugins": {
-            "ergebnis/composer-normalize": true
-        },
         "sort-packages": true
-    },
-    "minimum-stability": "dev"
+    }
 }

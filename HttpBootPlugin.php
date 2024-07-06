@@ -15,6 +15,7 @@ namespace Micro\Plugin\HttpBoot;
 
 use Micro\Framework\BootPluginDependent\Plugin\PluginDependedInterface;
 use Micro\Plugin\EventEmitter\EventEmitterPlugin;
+use Micro\Plugin\HttpCore\HttpCorePlugin;
 
 /**
  * @author Stanislau Komar <head.trackingsoft@gmail.com>

@@ -23,10 +23,10 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Stanislau Komar <kost@micro-php.net>
  */
-class ApplicationStartedListener implements EventListenerInterface
+readonly class ApplicationStartedListener implements EventListenerInterface
 {
     public function __construct(
-        private readonly HttpFacadeInterface $httpFacade
+        private HttpFacadeInterface $httpFacade
     ) {
     }
 
